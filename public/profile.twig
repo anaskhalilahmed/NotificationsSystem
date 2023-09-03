@@ -71,7 +71,7 @@ This file also registers the service worker,after successfully getting the token
                     // Register the firebase-messaging-sw.js
                     if ('serviceWorker' in navigator) {
                         window.addEventListener('load', function () {
-                            navigator.serviceWorker.register("./firebase-messaging-sw.js").then(function (registration) { // Registration was successful
+                            navigator.serviceWorker.register("./firebase-messaging-sw.js",{ scope: '/' }).then(function (registration) { // Registration was successful
                                 messaging.useServiceWorker(registration);
                                 console.log('ServiceWorker registration successful with scope: ', registration.scope);
                                 sent_token();
