@@ -104,6 +104,7 @@ This file also registers the service worker,after successfully getting the token
             Handles foreground messages when tab is in focus.
         */
         messaging.onMessage(function (payload) {
+            console.load(payload);
             var notificationoptions = {
                 body: payload.data.body,
             }
