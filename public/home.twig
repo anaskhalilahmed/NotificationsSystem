@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- online link of boostrap3 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <br>
+    <!-- Section for showing the signup and login buttons. -->
+    <div class="container" style="height: auto;background-color: brown;">
+        <div style="margin-top: 20px;margin-bottom: 20px;">
+            <button class="btn btn-default" onclick="signup()">SIGNUP</button>
+            <button class="btn btn-default" onclick="login()">LOGIN</button>
+        </div>
+    </div>
+
+    <br>
+    {% if home %}
+    <div class="container">
+        <!-- for the login -->
+        <div class="panel panel-primary" id="login" style="display: none;">
+            <div class="panel-heading">LOGIN</div>
+            <div class="panel-body">
+                <form action="/login" method="post">
+                    <input type="text" name="username" placeholder="Enter the username" class="form-control"><br>
+                    <input type="text" name="useremail" placeholder="Enter your email" class="form-control"><br>
+                    <button class="btn btn-default btn-block">OK</button>
+                </form>
+            </div>
+        </div>
+        <!-- for the signup -->
+        <div class="panel panel-primary" id="signup" style="display: none;">
+            <div class="panel-heading">SIGNUP</div>
+            <div class="panel-body">
+                <form action="/register" method="post">
+                    <input type="text" name="username" placeholder="Enter the username" class="form-control"><br>
+                    <input type="text" name="useremail" placeholder="Enter your email" class="form-control"><br>
+                    <button class="btn btn-default btn-block">OK</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% elseif erroronusername %}
+        <div class="container">
+            <!-- for the login -->
+            <div class="panel panel-primary" id="login" style="display: block;">
+                <div class="panel-heading">LOGIN</div>
+                <div class="panel-body">
+                    <form action="/login" method="post">
+                        <input type="text" name="username" placeholder="Enter the username" class="form-control">
+                        <div style="color:red">{{erroronusername}}</div><br>
+                        <input type="text" name="useremail" placeholder="Enter your email" class="form-control"><br>
+                        <button class="btn btn-default btn-block">OK</button>
+                    </form>
+                </div>
+            </div>
+            <!-- for the signup -->
+            <div class="panel panel-primary" id="signup" style="display: none;">
+                <div class="panel-heading">SIGNUP</div>
+                <div class="panel-body">
+                    <form action="/register" method="post">
+                        <input type="text" name="username" placeholder="Enter the username" class="form-control"><br>
+                        <input type="text" name="useremail" placeholder="Enter your email" class="form-control"><br>
+                        <button class="btn btn-default btn-block">OK</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% elseif erroronuseremail %}
+        <div class="container">
+            <!-- for the login -->
+            <div class="panel panel-primary" id="login" style="display: block;">
+                <div class="panel-heading">LOGIN</div>
+                <div class="panel-body">
+                    <form action="/login" method="post">
+                        <input type="text" name="username" placeholder="Enter the username" class="form-control"><br>
+                        <input type="text" name="useremail" placeholder="Enter your email" class="form-control">
+                        <div style="color:red">{{erroronuseremail}}</div>
+                        <button class="btn btn-default btn-block">OK</button>
+                    </form>
+                </div>
+            </div>
+            <!-- for the signup -->
+            <div class="panel panel-primary" id="signup" style="display: none;">
+                <div class="panel-heading">SIGNUP</div>
+                <div class="panel-body">
+                    <form action="/register" method="post">
+                        <input type="text" name="username" placeholder="Enter the username" class="form-control"><br>
+                        <input type="text" name="useremail" placeholder="Enter your email" class="form-control"><br>
+                        <button class="btn btn-default btn-block">OK</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <script>
+        function login(){
+            document.getElementById("signup").style.display="none";
+            document.getElementById("login").style.display="block";
+        }
+        function signup(){
+            document.getElementById("signup").style.display="block";
+            document.getElementById("login").style.display="none";
+        }
+
+        /*                          Preventing user for going back from this page.
+        After user logouts, the server redirect the user to this page,and in history previous page has  also
+        that page,so the user now can't go back bcz of the below code functionality,the below if will executed 
+        if user navigatng back to the same page i.e this page ,if yes then it will take the user to the forward
+        page which is also that page so this way we can prevent the user for going back from this applicatin
+        page.
+
+        Reload the page if user going back to the appication any page.so that a user can see's the refresh page.
+        
+        The expression window.performance.navigation.type == 2 is a comparison in JavaScript that is commonly 
+        used to determine the type of navigation that occurred in a web browser. The window.performance.navigation 
+        property provides information about the navigation of the current document, and the type property within 
+        it represents the type of navigation.
+
+        In this specific case, window.performance.navigation.type == 2 checks if the value of window.performance.
+        navigation.type is equal to 2. The value 2 corresponds to a "back" or "history" navigation. It 
+        indicates that the user navigated to the current page by clicking the browser's back button or using 
+        the JavaScript history.back() method.
+        */
+        if(window.performance.navigation.type == 2){
+            history.forward();    
+        }
+        
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,128 @@
+{# In this file we are going to first intialize the firebase app for making its instance then ask the
+user for permission for the notificatioin if granted generate the token,and this file also recieve the
+display the notification when application is in foreground state. 
+
+This file also registers the service worker,after successfully getting the token from the FCM server.
+#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- online link of boostrap3 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-messaging.js"></script>
+</head>
+<body onload="initializer()">
+
+    <br><br>
+    {% if userdetails %}            
+        <div class="container" style="border: 1px solid gray;font-size: 15px;">
+            UserName:<span>{{userdetails.username}}</span><br>
+            User_ID:<span id="user_id">{{userdetails._id}}</span>
+            <p>Welcome to the Notificatoin Systems....through FCM, or Node js</p>
+        </div>
+    {% endif %}
+    
+    <form action="/send" method="post">
+        <button>Send Notification</button>
+    </form>
+
+    
+    <script>
+        // Your web app's Firebase configuration
+        // the below configuration we gto form the Firebase Admin SDK 
+        const firebaseConfig = {
+            apiKey: "AIzaSyA7XT1A2Svkx8A-1jqvsNXTpcxaDYNRlgs",
+            authDomain: "notifications-system-6c6d6.firebaseapp.com",
+            projectId: "notifications-system-6c6d6",
+            storageBucket: "notifications-system-6c6d6.appspot.com",
+            messagingSenderId: "113177291764",
+            appId: "1:113177291764:web:e6f3fe4abd9b29ab56e7a1"
+        };
+
+        /* The below object firebase is avaliable in response of the API's we set in the head tag.
+        intialzing an application*/
+        firebase.initializeApp(firebaseConfig);
+
+    
+        const messaging = firebase.messaging();
+
+
+
+        function initializer() {
+            // What is token in FCM?
+            /*In Firebase Cloud Messaging (FCM), a registration token is a unique identifier that is generated 
+            for each instance of your app installed on a device. This token is used to send messages from your 
+            server or Firebase console to a specific app instance. It allows FCM to target messages accurately 
+            and deliver them to the right devices.
+            */
+            messaging.requestPermission()
+            .then(function (permission) { 
+                return messaging.getToken();
+            }).then(function (token) {
+                if (token == null) {
+                    location.reload();
+                } else {
+                    // Register the firebase-messaging-sw.js
+                    if ('serviceWorker' in navigator) {
+                        window.addEventListener('load', function () {
+                            navigator.serviceWorker.register("./public/firebase-messaging-sw.js").then(function (registration) { // Registration was successful
+                                messaging.useServiceWorker(registration);
+                                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                                sent_token();
+                            },function (err) { // registration failed :(
+                                console.log('ServiceWorker registration failed: ', err);
+                            });
+                        });
+                    }else{
+                        console.log("your browser does not support");
+                    }
+                    sent_token();
+                    async function sent_token(){
+                        var rqst=await fetch("/save_token/"+""+token+""+"/"+document.getElementById('user_id').innerText+"");
+                        var rqst_rsns=await rqst.json();
+                        console.log(rqst_rsns.status);
+                    }
+                }
+            }).catch(function (err) {
+                console.log(err);
+                console.log("a user is denied");
+            })
+        }
+
+        /* Handle incoming messages. Called when:
+            - a message is received while the app has focus
+            - the user clicks on an app notification created by a service worker
+            `messaging.onBackgroundMessage` handler.
+        
+            The below will show the notification when the application is in foreground means when in a visible conditions
+            Handles foreground messages when tab is in focus.
+        */
+        messaging.onMessage(function (payload) {
+            var notificationoptions = {
+                body: payload.data.body,
+            }
+            if (Notification.permission == "granted") {
+                var x = new Notification(payload.data.title, notificationoptions);
+                x.onclick = function (ev) {
+                    ev.preventDefault();
+                    window.open("http://localhost:3000/", "_blank");
+                    x.close();
+                }
+            }
+        });
+
+
+        
+    </script>
+
+
+
+</body>
+
+</html>

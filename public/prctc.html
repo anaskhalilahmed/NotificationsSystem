@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    var message = {
+        notification: {
+            title: "todolistscompletion.com",
+            body: "Complete your TODO List",
+            // icon: "images/football.jpg",
+        },
+        android:{
+            notification:{
+              click_action:"http://localhost:3000/"
+            }
+          },
+          webpush:{
+            notification:{
+               click_action:"http://localhost:3000/"
+           }
+          },
+        tokens:[result[0].user_deviceToken],
+    }
+    admin.messaging().sendEachForMulticast(message).then(function(response){
+        console.log(response);
+    }).catch(function(err){
+        console.log(err);
+    });
+    
+</body>
+</html>
