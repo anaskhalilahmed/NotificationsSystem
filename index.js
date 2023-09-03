@@ -35,7 +35,7 @@ var express=require("express");
 var admin=require("firebase-admin");
 var app=express();
 
-// app.use(express.static(__dirname));
+app.use(express.static(__dirname));
 
 /*                                      Firebase Console Messaging mConfiguration  
 This file contains the project details required by firebase for initialization and secure connection 
