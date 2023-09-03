@@ -35,7 +35,7 @@ var express=require("express");
 var admin=require("firebase-admin");
 var app=express();
 
-app.use(express.static(__dirname));
+// app.use(express.static(__dirname));
 
 /*                                      Firebase Console Messaging mConfiguration  
 This file contains the project details required by firebase for initialization and secure connection 
@@ -67,7 +67,7 @@ mongoose.connect("mongodb+srv://anas:anas123@cluster0.59qwvlj.mongodb.net/test?r
 
 //set the templating engine 
 app.set('view engine','twig');
-app.set('views','/public');
+app.set('views',__dirname+'/public');
 
 
 // express.json() is a middleware function that parses JSON payload, if any, in the incoming API requests
