@@ -67,7 +67,7 @@ mongoose.connect("mongodb+srv://anas:anas123@cluster0.59qwvlj.mongodb.net/test?r
 
 //set the templating engine 
 app.set('view engine','twig');
-app.set('views','./public');
+app.set('views','/public');
 
 
 // express.json() is a middleware function that parses JSON payload, if any, in the incoming API requests
@@ -148,7 +148,7 @@ app.post("/login",function(req,res){
 
 
 app.get("/",function(req,res){
-    res.status(200).render("public/home",{home:"yes"});
+    res.status(200).render("home",{home:"yes"});
 });
 
 
